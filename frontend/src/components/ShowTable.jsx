@@ -52,7 +52,7 @@ export default function ShowTable() {
 
   const getpetdata = () => {
     axios
-      .get("http://localhost:8080/getpetshop")
+      .get("https://mernstack121.herokuapp.com/getpetshop")
       .then((res) => {
         console.log(res.data);
         dispatch(setProducts(res.data));
@@ -70,7 +70,7 @@ export default function ShowTable() {
   const handleSubmitCity = (e) => {
     e.preventDefault();
     axios
-      .get(`http://localhost:8080/getpetbycity/${e.target.city.value}`)
+      .get(`https://mernstack121.herokuapp.com/getpetbycity/${e.target.city.value}`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));
@@ -82,7 +82,7 @@ export default function ShowTable() {
 
   const handleHighSort = () => {
     axios
-      .get(`http://localhost:8080/highsortedpetshop`)
+      .get(`https://mernstack121.herokuapp.com/highsortedpetshop`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));
@@ -93,7 +93,7 @@ export default function ShowTable() {
   };
   const handlelowSort = () => {
     axios
-      .get(`http://localhost:8080/lowsortedpetshop`)
+      .get(`https://mernstack121.herokuapp.com/lowsortedpetshop`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));
@@ -105,7 +105,7 @@ export default function ShowTable() {
 
   const handleVerifiedSort = () => {
     axios
-      .get(`http://localhost:8080/getbyverified/Verified`)
+      .get(`https://mernstack121.herokuapp.com/getbyverified/Verified`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));
@@ -117,7 +117,7 @@ export default function ShowTable() {
 
   const handleUnverifiedSort = () => {
     axios
-      .get(`http://localhost:8080/getbyverified/Unverified`)
+      .get(`https://mernstack121.herokuapp.com/getbyverified/Unverified`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));

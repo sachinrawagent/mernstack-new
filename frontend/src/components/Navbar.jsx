@@ -50,12 +50,21 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  
+  const handleSignup = () => {
+    navigate("/register");
+  };
 
+  const handleLogout = () => {
+    dispatch(userLogin({}));
+    localStorage.setItem("token", "");
+  };
+  
   const getuser = () => {
     const userid = JSON.parse(localStorage.getItem("user_id"));
 
     axios
-      .get(`http://localhost:8080/getuserbyid/${userid}`)
+      .get(`https://mernstack121.herokuapp.com/getuserbyid/${userid}`)
       .then((res) => {
         setUser(JSON.parse(res.data.image));
       })
@@ -171,13 +180,12 @@ const Navbar = () => {
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  textAlign="center"
-                  onClick={() => navigate("/login")}
-                  sx={{ padding: "2px" }}
-                >
-                  {!token ? "Login" : "Logout"}
-                </Typography>
+              <Typography
+                textAlign="center"
+                onClick={!token ? handleSignup : handleLogout}
+              >
+                {!token ? "SignUp" : "Logout"}
+              </Typography>
               </MenuItem>
             </Menu>
           </Box>

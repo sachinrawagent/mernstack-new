@@ -28,7 +28,7 @@ export default function CreatePetShop() {
     };
     console.log(payload);
     axios
-      .post("http://localhost:8080/createpetshop", payload)
+      .post("https://mernstack121.herokuapp.com/createpetshop", payload)
       .then((res) => {
         console.log(res);
         alert("Flat created successfully");

@@ -12,12 +12,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
 const theme = createTheme();
 
 export default function SignUp() {
-  const [file, setFile] = useState();
 
   const navigate = useNavigate();
 
@@ -38,7 +35,7 @@ export default function SignUp() {
       };
 
       axios
-        .post("http://localhost:8080/register", payload)
+        .post("https://mernstack121.herokuapp.com/register", payload)
         .then((res) => {
           console.log(res.data.user);
           alert("User created successfully");

@@ -42,7 +42,7 @@ export default function PetDetails() {
   const getpetdata = () => {
     const petid = localStorage.getItem("pets_id");
     axios
-      .get(`http://localhost:8080/getpetshopbyid/${petid}`)
+      .get(`https://mernstack121.herokuapp.com/getpetshopbyid/${petid}`)
       .then((res) => {
         console.log(res.data);
         dispatch(selectProducts([res.data]));
