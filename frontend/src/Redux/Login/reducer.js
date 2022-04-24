@@ -1,6 +1,6 @@
-import { USER_LOGIN } from "./action";
+import { USER_LOGIN, ADMIN_LOGIN  } from "./action";
 
-const initState = { token: "" }
+const initState = { token: "", admin: false  }
 
 export const LogInReducer = (store = initState, { type, payload }) => {
     switch (type) {
@@ -13,4 +13,16 @@ export const LogInReducer = (store = initState, { type, payload }) => {
             return store;
     }
 
-} 
+}
+export const adminReducer = (store = initState, { type, payload }) => {
+    switch (type) {
+        case ADMIN_LOGIN:
+            return {
+                ...store,
+                admin: payload,
+            }
+        default:
+            return store;
+    }
+
+}

@@ -39,6 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function ShowTable() {
   
+  const [city, setCity] = React.useState("");
   const dispatch = useDispatch();
 
   const getTableData = useSelector((store) => store.getDataReducer.products);
@@ -70,7 +71,7 @@ export default function ShowTable() {
   const handleSubmitCity = (e) => {
     e.preventDefault();
     axios
-      .get(`https://mernstack121.herokuapp.com/getpetbycity/${e.target.city.value}`)
+      .get(`https://mernstack121.herokuapp.com/getpetbycity/${city}`)
       .then((response) => {
         console.log(response.data);
         dispatch(setProducts(response.data));
@@ -177,6 +178,7 @@ export default function ShowTable() {
             display: "flex",
             justifyContent: "space-around",
           }}
+          onChange={(e) => setCity(e.target.value)}
         >
         <Box>
             <TextField

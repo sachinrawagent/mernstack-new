@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { userLogin } from "../Redux/Login/action";
+import { userLogin, adminLogin, userImage } from "../Redux/Login/action";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
@@ -43,9 +43,16 @@ export default function SignIn() {
         .then((res) => {
           alert("Login successfully");
           console.log(res);
+          if (res.data.user.username === "admin") {
+            dispatch(adminLogin(true));
+            localStorage.setItem("admin", "true");
+          }
           localStorage.setItem("token", res.data.token);
+
           dispatch(userLogin(res.data.token));
-          localStorage.setItem("user_id", JSON.stringify(res.data.user._id));
+         
+          localStorage.setItem("user_id", res.data.user._id);
+           
           navigate("/");
         })
         .catch((err) => {
@@ -53,9 +60,6 @@ export default function SignIn() {
         });
     }
   };
-
-  //   const localStorageToken = localStorage.getItem("token");
-  //   dispatch(userLogin(localStorageToken));
 
   return (
     <ThemeProvider theme={theme}>
@@ -119,7 +123,7 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2,backgroundColor:"red" }}
+              sx={{ mt: 3, mb: 2,backgroundColor:"red"}}
             >
               Sign In
             </Button>

@@ -15,23 +15,24 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { userLogin } from "../Redux/Login/action";
+import { userLogin, adminLogin, userImage } from "../Redux/Login/action";
+import { setProducts } from "../Redux/DataApi/action";
 
 const Navbar = () => {
   const dispatch = useDispatch();
 
   const token = useSelector((store) => store.LogInReducer.token);
+  const admin = useSelector((store) => store.adminReducer.admin);
+   
   const localStorageToken = localStorage.getItem("token");
   dispatch(userLogin(localStorageToken));
+  const localStorageAdmin = localStorage.getItem("admin");
+  dispatch(adminLogin(localStorageAdmin));
+ 
 
   const navigate = useNavigate();
-  
-  const [user, setUser] = useState("");
 
-
-  useEffect(() => {
-    getuser();
-  }, []);
+ 
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -50,7 +51,21 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  
+
+  const [city, setCity] = useState("");
+  const handleSubmitCity = (e) => {
+    e.preventDefault();
+    axios
+      .get(`https://mernstack121.herokuapp.com/getpetbycity/${city}`)
+      .then((response) => {
+        console.log(response.data);
+        dispatch(setProducts(response.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleSignup = () => {
     navigate("/register");
   };
@@ -58,36 +73,34 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(userLogin({}));
     localStorage.setItem("token", "");
+    localStorage.setItem("admin", "");
+    localStorage.setItem("user_id", "");
+    localStorage.setItem("user_image", "");
   };
-  
-  const getuser = () => {
-    const userid = JSON.parse(localStorage.getItem("user_id"));
-
-    axios
-      .get(`https://mernstack121.herokuapp.com/getuserbyid/${userid}`)
-      .then((res) => {
-        setUser(JSON.parse(res.data.image));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  console.log(user);
   return (
-    <AppBar position="static" sx={{backgroundColor:"gray",cursor:"pointer"}}>
-      <Container maxWidth="xl"  >
+    <AppBar position="static">
+      <Container maxWidth="xl" sx={{backgroundColor:"darkviolet"}}>
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/")}
           >
-          Pet Shop
+            Pet Shop
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -124,6 +137,7 @@ const Navbar = () => {
               </MenuItem>
             </Menu>
           </Box>
+
           <Typography
             variant="h6"
             noWrap
@@ -140,18 +154,44 @@ const Navbar = () => {
             >
               Home
             </Button>
-            <Button
-              sx={{ my: 2,ml:3, color: "white", display: "block" }}
-              onClick={() => navigate("/createpetdetails")}
-            >
-            Add Shop
-            </Button>
+
+            {admin ? (
+              <Button
+                sx={{ my: 2,ml:3, color: "white", display: "block" }}
+                onClick={() => navigate("/createpetdetails")}
+              >
+               Add New Shop
+              </Button>
+            ) : (
+              ""
+            )}
+
+            {admin ? (
+              <Button
+                sx={{ my: 2,ml:3, color: "white", display: "block" }}
+                onClick={() => navigate("/allpetstatus")}
+              >
+                Check Orders
+              </Button>
+            ) : (
+              ""
+            )}
+            {token ? (
+              <Button
+                sx={{ my: 2,ml:3, color: "white", display: "block" }}
+                onClick={() => navigate("/petstatus")}
+              >
+               Status
+              </Button>
+            ) : (
+              ""
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, mr: 3 }}>
-                <Avatar alt="Remy Sharp" src={user} />
+                <Avatar alt="Remy Sharp" src="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -180,12 +220,13 @@ const Navbar = () => {
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-              <Typography
-                textAlign="center"
-                onClick={!token ? handleSignup : handleLogout}
-              >
-                {!token ? "SignUp" : "Logout"}
-              </Typography>
+                <Typography
+                  textAlign="center"
+                  onClick={!token ? handleSignup : handleLogout}
+                  sx={{ padding: "2px" }}
+                >
+                  {!token ? "Login" : "Logout"}
+                </Typography>
               </MenuItem>
             </Menu>
           </Box>
