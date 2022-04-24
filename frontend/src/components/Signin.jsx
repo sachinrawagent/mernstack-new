@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { userLogin, adminLogin, userImage } from "../Redux/Login/action";
+import { userLogin, adminLogin } from "../Redux/Login/action";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
